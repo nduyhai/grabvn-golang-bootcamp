@@ -5,7 +5,6 @@ import (
 	"errors"
 	"fmt"
 	"os"
-	"regexp"
 	"strconv"
 	"strings"
 )
@@ -35,19 +34,16 @@ func main() {
 }
 
 func handle(input string) (result string, e error) {
-
-	r := regexp.MustCompile("\\s+")
-	arg := r.Split(input, -1)
-
+	arg := strings.Fields(input)
 	if len(arg) == 3 {
-		a, error := strconv.Atoi(arg[0])
-		if error != nil {
-			e = errors.New("sorry, please type valid operand 1")
+		a, err := parseParamInt(arg[0])
+		if err != nil {
+			return
 		}
 
-		b, error := strconv.Atoi(arg[2])
-		if error != nil {
-			e = errors.New("sorry, please type valid operand 2")
+		b, err := parseParamInt(arg[2])
+		if err != nil {
+			return
 		}
 
 		switch arg[1] {
@@ -61,17 +57,30 @@ func handle(input string) (result string, e error) {
 
 		case "/":
 			if b == 0 {
-				e = errors.New("sorry, cannot  device to zero")
+				e = genError("sorry, cannot  device to zero")
 
 			} else {
 				result = strconv.FormatFloat(float64(float64(a)/float64(b)), 'g', -1, 64)
 			}
 
 		default:
-			e = errors.New("sorry, please type valid operator")
+			e = genError("sorry, please type valid operator")
 		}
 	} else {
-		e = errors.New("sorry, please type valid input")
+		e = genError("sorry, please type valid input")
 	}
+	return
+}
+
+func parseParamInt(param string) (r int, e error) {
+	r, err := strconv.Atoi(param)
+	if err != nil {
+		e = genError("sorry, please type valid operand")
+	}
+	return
+}
+
+func genError(cause string) (e error) {
+	e = errors.New(cause)
 	return
 }
