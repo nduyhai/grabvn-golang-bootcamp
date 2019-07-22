@@ -1,16 +1,25 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"gopkg.in/yaml.v2"
+	"io/ioutil"
 	"log"
+	"os"
 )
 
 var globalDB *gorm.DB
 
 func main() {
-	db, err := gorm.Open("postgres", "host=localhost port=5432 user=postgres dbname=postgres password=example sslmode=disable")
+	//load config
+	var config Conf
+	config.getConf()
+
+	args := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", config.DB.Host, config.DB.Port, config.DB.User, config.DB.DBName, config.DB.Password)
+	db, err := gorm.Open("postgres", args)
 	defer db.Close()
 
 	if err == nil {
@@ -29,7 +38,7 @@ func main() {
 		_ = r.Run(":8080")
 
 	} else {
-		log.Fatal("Cannot connect DB")
+		log.Fatal("Cannot connect DB: " + err.Error())
 	}
 
 }
@@ -38,6 +47,16 @@ type Todo struct {
 	gorm.Model
 	Title     string
 	Completed bool
+}
+
+type Conf struct {
+	DB struct {
+		Host     string `yaml:"host"`
+		Port     string `yaml:"port"`
+		User     string `yaml:"user"`
+		Password string `yaml:"password"`
+		DBName   string `yaml:"dbname"`
+	}
 }
 
 func createTodo(c *gin.Context) {
@@ -75,4 +94,18 @@ func getAllTodo(c *gin.Context) {
 	}
 
 	c.JSON(200, todos)
+}
+
+func (c *Conf) getConf() *Conf {
+	pwd, _ := os.Getwd()
+	yamlFile, err := ioutil.ReadFile(pwd + "/configs/application.yml")
+	if err != nil {
+		log.Printf("yamlFile.Get err   #%v ", err)
+	}
+	err = yaml.Unmarshal(yamlFile, c)
+	if err != nil {
+		log.Fatalf("Unmarshal: %v", err)
+	}
+
+	return c
 }
