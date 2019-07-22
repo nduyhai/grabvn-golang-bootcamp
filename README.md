@@ -1,8 +1,8 @@
 # Self Improvement
 
-* Setup
+* Setup database
 ```
-go get -u github.com/jinzhu/gorm
+cd deployments
 
-go get -u github.com/gin-gonic/gin
+docker-compose up
 ```
