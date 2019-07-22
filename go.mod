@@ -6,8 +6,8 @@ require (
 	cloud.google.com/go v0.43.0 // indirect
 	github.com/denisenkom/go-mssqldb v0.0.0-20190720212816-23f0cad53f5c // indirect
 	github.com/gin-contrib/sse v0.1.0 // indirect
-	github.com/gin-gonic/gin v1.4.0 // indirect
-	github.com/jinzhu/gorm v1.9.10 // indirect
+	github.com/gin-gonic/gin v1.4.0
+	github.com/jinzhu/gorm v1.9.10
 	github.com/lib/pq v1.2.0 // indirect
 	github.com/mattn/go-isatty v0.0.8 // indirect
 	github.com/mattn/go-sqlite3 v1.11.0 // indirect
@@ -21,4 +21,5 @@ require (
 	golang.org/x/sys v0.0.0-20190712062909-fae7ac547cb7 // indirect
 	golang.org/x/tools v0.0.0-20190719005602-e377ae9d6386 // indirect
 	google.golang.org/grpc v1.22.0 // indirect
+	gopkg.in/yaml.v2 v2.2.2
 )

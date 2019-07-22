@@ -4,4 +4,5 @@ db:
   user: postgres
   password: example
   dbname: postgres
-
+server:
+  port: 8080

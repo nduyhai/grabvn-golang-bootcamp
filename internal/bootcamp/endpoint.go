@@ -1,19 +1,15 @@
-package main
+package bootcamp
 
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
-	"gopkg.in/yaml.v2"
-	"io/ioutil"
 	"log"
-	"os"
 )
 
 var globalDB *gorm.DB
 
-func main() {
+func Handle() {
 	//load config
 	var config Conf
 	config.getConf()
@@ -35,28 +31,17 @@ func main() {
 		r.GET("/api/todo", getAllTodo)
 		r.POST("/api/todo", createTodo)
 
-		_ = r.Run(":8080")
+		_ = r.Run(":" + config.Server.Port)
 
 	} else {
 		log.Fatal("Cannot connect DB: " + err.Error())
 	}
-
 }
 
 type Todo struct {
 	gorm.Model
 	Title     string
 	Completed bool
-}
-
-type Conf struct {
-	DB struct {
-		Host     string `yaml:"host"`
-		Port     string `yaml:"port"`
-		User     string `yaml:"user"`
-		Password string `yaml:"password"`
-		DBName   string `yaml:"dbname"`
-	}
 }
 
 func createTodo(c *gin.Context) {
@@ -94,18 +79,4 @@ func getAllTodo(c *gin.Context) {
 	}
 
 	c.JSON(200, todos)
-}
-
-func (c *Conf) getConf() *Conf {
-	pwd, _ := os.Getwd()
-	yamlFile, err := ioutil.ReadFile(pwd + "/configs/application.yml")
-	if err != nil {
-		log.Printf("yamlFile.Get err   #%v ", err)
-	}
-	err = yaml.Unmarshal(yamlFile, c)
-	if err != nil {
-		log.Fatalf("Unmarshal: %v", err)
-	}
-
-	return c
 }
