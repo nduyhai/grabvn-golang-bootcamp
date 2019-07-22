@@ -10,8 +10,16 @@ import (
 var globalDB *gorm.DB
 
 func main() {
-	err := connectDB()
-	if err != nil {
+	db, err := gorm.Open("postgres", "host=localhost port=5432 user=postgres dbname=postgres password=example sslmode=disable")
+	defer db.Close()
+
+	if err == nil {
+
+		err = db.AutoMigrate(Todo{}).Error
+		if err != nil {
+			log.Fatal("failed to migrate table todos")
+		}
+		globalDB = db
 
 		r := gin.Default()
 
@@ -30,23 +38,6 @@ type Todo struct {
 	gorm.Model
 	Title     string
 	Completed bool
-}
-
-func connectDB() (err error) {
-	db, err := gorm.Open("postgres", "host=localhost port=5432 user=postgres dbname=postgres password=example")
-	defer db.Close()
-
-	if err != nil {
-		return
-	} else {
-		err = db.AutoMigrate(Todo{}).Error
-		if err != nil {
-			log.Fatal("failed to migrate table todos")
-		}
-
-		globalDB = db
-		return
-	}
 }
 
 func createTodo(c *gin.Context) {

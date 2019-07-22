@@ -9,3 +9,12 @@ GET http://localhost:8080/api/todo
 Accept: application/json
 
 ###
+
+POST http://localhost:8080/api/todo
+Content-Type: application/json
+
+{
+  "Title" : "The last one"
+}
+
+###
