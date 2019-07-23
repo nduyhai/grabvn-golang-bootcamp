@@ -9,7 +9,12 @@ func main() {
 	numbers := make(chan int)
 
 	go func(<-chan int) {
-		for num := range numbers {
+		for {
+			num, ok := <-numbers
+			if !ok {
+				fmt.Println("Wtf")
+				return
+			}
 			fmt.Println("Got:", num)
 		}
 	}(numbers)
@@ -21,5 +26,5 @@ func main() {
 		close(numbers)
 	}(numbers)
 
-	select {}
+	_, _ = fmt.Scanln()
 }
