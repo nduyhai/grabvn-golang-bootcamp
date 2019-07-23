@@ -8,6 +8,10 @@
 
 ## Week 2: Concurrency, Channels, Goroutines,...
 
+[ Assignment 2: Counter](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-2-counter)
+
+[ Seft study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_2)
+
 
 ## Week 3: gRPC, Protobuf Basics
 
