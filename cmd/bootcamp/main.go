@@ -1,13 +1,11 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
+	"grabvn-golang-bootcamp/internal/bootcamp"
 	"io/ioutil"
-	"log"
 	"os"
 	"path/filepath"
-	"strings"
 	"sync"
 )
 
@@ -16,10 +14,24 @@ func main() {
 	path := pwd + "/assets/"
 	files, _ := ioutil.ReadDir(path)
 
-	final := counterAllFile(files, path)
+	pool := bootcamp.NewFixedThreadPool(10, 1000)
 
+	var futures []bootcamp.Future
+	for _, f := range files {
+		future := pool.Submit(&bootcamp.TaskCounter{FilePath: filepath.Join(path, f.Name())})
+		futures = append(futures, *future)
+	}
+
+	d := merge(futures)
+	result := count(d)
+
+	fmt.Println("Result:", result)
+}
+
+func count(in <-chan map[string]int) map[string]int {
 	var finalMap = make(map[string]int)
-	for e := range final {
+
+	for e := range in {
 		for k, v := range e {
 			size, ok := finalMap[k]
 			if ok {
@@ -29,25 +41,22 @@ func main() {
 			}
 		}
 	}
-
-	fmt.Println(finalMap)
+	return finalMap
 }
 
-func counterAllFile(files []os.FileInfo, path string) chan map[string]int {
-	out := make(chan map[string]int, 100)
+func merge(futures []bootcamp.Future) <-chan map[string]int {
 	var wg sync.WaitGroup
+	out := make(chan map[string]int)
 
-	output := func(file string) {
-		for n := range counterByFile(file) {
+	output := func(f bootcamp.Future) {
+		for n := range f.Data {
 			out <- n
 		}
 		wg.Done()
 	}
-
-	wg.Add(len(files))
-
-	for _, f := range files {
-		go output(filepath.Join(path, f.Name()))
+	wg.Add(len(futures))
+	for _, f := range futures {
+		go output(f)
 	}
 
 	go func() {
@@ -55,39 +64,4 @@ func counterAllFile(files []os.FileInfo, path string) chan map[string]int {
 		close(out)
 	}()
 	return out
-}
-func counterByFile(filePath string) chan map[string]int {
-	result := make(chan map[string]int, 100)
-	file, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	defer file.Close()
-	defer close(result)
-
-	in := bufio.NewScanner(file)
-
-	for in.Scan() {
-		func(line string) {
-			stats := make(map[string]int)
-
-			for _, work := range strings.Fields(line) {
-				size, ok := stats[work]
-				if ok {
-					stats[work] = size + 1
-				} else {
-					stats[work] = 1
-				}
-			}
-			result <- stats
-
-		}(in.Text())
-
-	}
-
-	if err := in.Err(); err != nil {
-		log.Fatal(err)
-	}
-	return result
 }

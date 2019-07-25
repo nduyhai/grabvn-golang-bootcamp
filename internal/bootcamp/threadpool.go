@@ -1,18 +1,34 @@
 package bootcamp
 
+import (
+	"log"
+)
+
 type ThreadPool struct {
 	queueSize   int64
 	workers     int
-	pool        chan chan interface{}
-	job         chan interface{}
+	pool        chan chan FutureTask
+	job         chan FutureTask
 	closeHandle chan bool
+}
+type Task interface {
+	Execute() map[string]int
+}
+
+type Future struct {
+	Data chan map[string]int
+}
+
+type FutureTask struct {
+	Handler  Task
+	Response *Future
 }
 
 func NewFixedThreadPool(poolSize int, queueSize int64) *ThreadPool {
 	threadPool := &ThreadPool{workers: poolSize, queueSize: queueSize}
 
-	threadPool.job = make(chan interface{}, queueSize)
-	threadPool.pool = make(chan chan interface{}, queueSize)
+	threadPool.job = make(chan FutureTask, queueSize)
+	threadPool.pool = make(chan chan FutureTask, queueSize)
 	threadPool.closeHandle = make(chan bool)
 
 	threadPool.createPool()
@@ -20,33 +36,29 @@ func NewFixedThreadPool(poolSize int, queueSize int64) *ThreadPool {
 	return threadPool
 }
 
-func (p *ThreadPool) Submit(task Callable) *Future {
-	handle := &Future{response: make(chan interface{})}
-	futureTask := CallableTask{Task: task, Handle: handle}
-
-	p.job <- futureTask
-
-	return futureTask.Handle
+func (p *ThreadPool) Submit(task Task) *Future {
+	response := &Future{make(chan map[string]int, 1)}
+	future := FutureTask{task, response}
+	p.job <- future
+	return future.Response
 }
 
 func (p *ThreadPool) createPool() {
+	log.Println("Create pool.....", p.workers)
 	for i := 0; i < p.workers; i++ {
 		go func() {
 			for {
 				p.pool <- p.job
 				select {
 				case job := <-p.job:
-					task, _ := job.(CallableTask)
+					log.Println("Executing")
+					result := job.Handler.Execute()
+					log.Println("Executed")
+					job.Response.Data <- result
 
-					res := task.Task.Call()
-
-					task.Handle.done = true
-					task.Handle.response <- res
-
-				case closed := <-p.closeHandle:
-					if closed {
-						return
-					}
+					close(job.Response.Data)
+				case <-p.closeHandle:
+					return
 				}
 			}
 		}()
