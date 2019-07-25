@@ -34,7 +34,7 @@ func main() {
 }
 
 func counterAllFile(files []os.FileInfo, path string) chan map[string]int {
-	out := make(chan map[string]int)
+	out := make(chan map[string]int, 100)
 	var wg sync.WaitGroup
 
 	output := func(file string) {
@@ -57,7 +57,7 @@ func counterAllFile(files []os.FileInfo, path string) chan map[string]int {
 	return out
 }
 func counterByFile(filePath string) chan map[string]int {
-	result := make(chan map[string]int)
+	result := make(chan map[string]int, 100)
 	file, err := os.Open(filePath)
 	if err != nil {
 		log.Fatal(err)
