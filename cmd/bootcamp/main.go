@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"grabvn-golang-bootcamp/internal/bootcamp"
 	"io/ioutil"
@@ -11,14 +12,18 @@ import (
 
 func main() {
 	pwd, _ := os.Getwd()
-	path := pwd + "/assets/"
-	files, _ := ioutil.ReadDir(path)
+	defaultPath := pwd + "/assets/"
+
+	path := flag.String("folder", defaultPath, "The folder")
+	flag.Parse()
+
+	files, _ := ioutil.ReadDir(*path)
 
 	pool := bootcamp.NewFixedThreadPool(10, 1000)
 
 	var futures []bootcamp.Future
 	for _, f := range files {
-		future := pool.Submit(&bootcamp.TaskCounter{FilePath: filepath.Join(path, f.Name())})
+		future := pool.Submit(&bootcamp.TaskCounter{FilePath: filepath.Join(*path, f.Name())})
 		futures = append(futures, *future)
 	}
 
