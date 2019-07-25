@@ -40,20 +40,17 @@ func counterByFile(filePath string) chan map[string]int {
 	in := bufio.NewScanner(file)
 
 	for in.Scan() {
-		func(line string) {
-			stats := make(map[string]int)
+		stats := make(map[string]int)
 
-			for _, work := range strings.Fields(line) {
-				size, ok := stats[work]
-				if ok {
-					stats[work] = size + 1
-				} else {
-					stats[work] = 1
-				}
+		for _, work := range strings.Fields(in.Text()) {
+			size, ok := stats[work]
+			if ok {
+				stats[work] = size + 1
+			} else {
+				stats[work] = 1
 			}
-			result <- stats
-
-		}(in.Text())
+		}
+		result <- stats
 
 	}
 
