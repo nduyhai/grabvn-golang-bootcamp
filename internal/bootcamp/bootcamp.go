@@ -23,17 +23,38 @@ func Handle() {
 		}
 
 		webContext := &WebContext{DB: db}
-		server := gin.Default()
-
-		server.GET("/api/todo", webContext.getAllTodo)
-		server.GET("/api/todo/:id", webContext.getTodoById)
-		server.POST("/api/todo", webContext.createTodo)
+		server := initializeServer()
+		setupRoute(server, webContext)
 
 		_ = server.Run(":" + config.Server.Port)
 
 	} else {
 		log.Fatal("Cannot connect DB: " + err.Error())
 	}
+}
+
+func setupRoute(server *gin.Engine, webContext *WebContext) {
+	server.GET("/api/todo", webContext.getAllTodo)
+	server.GET("/api/todo/:id", webContext.getTodoById)
+	server.POST("/api/todo", webContext.createTodo)
+
+	//Add Test Basic auth
+	authGroup := server.Group("/auth", gin.BasicAuth(gin.Accounts{
+		"jon": "123",
+	}))
+
+	authGroup.GET("/", func(context *gin.Context) {
+		context.String(200, "OK")
+	})
+}
+
+func initializeServer() *gin.Engine {
+	server := gin.New()
+
+	server.Use(gin.Logger())
+	server.Use(gin.Recovery())
+
+	return server
 }
 
 func connectDB(config Conf) (*gorm.DB, error) {
