@@ -2,16 +2,9 @@ package bootcamp
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 	"log"
 	"strconv"
 )
-
-type Todo struct {
-	gorm.Model
-	Title     string
-	Completed bool
-}
 
 func createTodo(ctx *gin.Context, webContext *WebContext) {
 	var argument struct {
