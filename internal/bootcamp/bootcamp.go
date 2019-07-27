@@ -39,11 +39,10 @@ func setupRoute(server *gin.Engine, webContext *WebContext) {
 	server.POST("/api/todo", webContext.createTodo)
 
 	//Add Test Basic auth
-	authGroup := server.Group("/auth", gin.BasicAuth(gin.Accounts{
-		"jon": "123",
-	}))
+	authGroup := server.Group("/auth", gin.BasicAuth(getAllAccount()))
 
 	authGroup.GET("/", func(context *gin.Context) {
+
 		context.String(200, "OK")
 	})
 }

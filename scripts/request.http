@@ -28,3 +28,8 @@ GET http://localhost:8080/auth/
 Accept: application/json
 Authorization: Basic jon 123
 ###
+
+GET http://localhost:8080/auth/
+Accept: application/json
+Authorization: Basic jon fake
+###
