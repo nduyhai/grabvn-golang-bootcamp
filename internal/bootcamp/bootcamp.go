@@ -12,11 +12,10 @@ func Handle() {
 	var config Conf
 	config.getConf()
 
-	args := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", config.DB.Host, config.DB.Port, config.DB.User, config.DB.DBName, config.DB.Password)
-	db, err := gorm.Open("postgres", args)
-	defer db.Close()
-
+	db, err := connectDB(config)
 	if err == nil {
+
+		defer db.Close()
 
 		err = db.AutoMigrate(Todo{}).Error
 		if err != nil {
@@ -35,4 +34,10 @@ func Handle() {
 	} else {
 		log.Fatal("Cannot connect DB: " + err.Error())
 	}
+}
+
+func connectDB(config Conf) (*gorm.DB, error) {
+	args := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", config.DB.Host, config.DB.Port, config.DB.User, config.DB.DBName, config.DB.Password)
+	db, err := gorm.Open("postgres", args)
+	return db, err
 }
