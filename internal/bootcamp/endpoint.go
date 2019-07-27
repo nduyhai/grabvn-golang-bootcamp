@@ -1,44 +1,11 @@
 package bootcamp
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"log"
 	"strconv"
 )
-
-var globalDB *gorm.DB
-
-func Handle() {
-	//load config
-	var config Conf
-	config.getConf()
-
-	args := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", config.DB.Host, config.DB.Port, config.DB.User, config.DB.DBName, config.DB.Password)
-	db, err := gorm.Open("postgres", args)
-	defer db.Close()
-
-	if err == nil {
-
-		err = db.AutoMigrate(Todo{}).Error
-		if err != nil {
-			log.Fatal("failed to migrate table todos")
-		}
-		globalDB = db
-
-		r := gin.Default()
-
-		r.GET("/api/todo", getAllTodo)
-		r.GET("/api/todo/:id", getTodoById)
-		r.POST("/api/todo", createTodo)
-
-		_ = r.Run(":" + config.Server.Port)
-
-	} else {
-		log.Fatal("Cannot connect DB: " + err.Error())
-	}
-}
 
 type Todo struct {
 	gorm.Model
@@ -46,14 +13,14 @@ type Todo struct {
 	Completed bool
 }
 
-func createTodo(c *gin.Context) {
+func createTodo(ctx *gin.Context, webContext *WebContext) {
 	var argument struct {
 		Title string
 	}
 
-	err := c.BindJSON(&argument)
+	err := ctx.BindJSON(&argument)
 	if err != nil {
-		c.String(400, "invalid param")
+		ctx.String(400, "invalid param")
 		return
 	}
 
@@ -62,32 +29,32 @@ func createTodo(c *gin.Context) {
 		Completed: false,
 	}
 
-	err = globalDB.Create(&todo).Error
+	err = webContext.DB.Create(&todo).Error
 	if err != nil {
-		c.String(500, "failed to create new todo")
+		ctx.String(500, "failed to create new todo")
 	} else {
-		c.JSON(200, todo)
+		ctx.JSON(200, todo)
 	}
 }
 
-func getAllTodo(c *gin.Context) {
+func getAllTodo(ctx *gin.Context, webContext *WebContext) {
 	var todo []Todo
-	err := globalDB.Find(&todo).Error
+	err := webContext.DB.Find(&todo).Error
 
 	if err != nil {
-		c.String(500, "failed to list todolist")
+		ctx.String(500, "failed to list todolist")
 	} else {
-		c.JSON(200, todo)
+		ctx.JSON(200, todo)
 	}
 
 }
 
-func getTodoById(ctx *gin.Context) {
+func getTodoById(ctx *gin.Context, webContext *WebContext) {
 	param := ctx.Param("id")
 	id, err := strconv.ParseInt(param, 10, 64)
 	if err == nil {
 		var todo Todo
-		globalDB.Where("id = ?", id).Find(&todo)
+		webContext.DB.Where("id = ?", id).Find(&todo)
 
 		ctx.JSON(200, todo)
 	} else {
