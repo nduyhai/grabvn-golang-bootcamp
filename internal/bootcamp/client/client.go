@@ -1,26 +1,35 @@
 package client
 
 import (
+	"context"
 	"github.com/google/uuid"
+	"google.golang.org/grpc"
 	"grabvn-golang-bootcamp/internal/bootcamp/msg"
 	"log"
-	"net/rpc"
+	"time"
 )
 
 const (
 	port = ":9000"
 )
 
-func Client() {
+func StartClient() {
 	log.Print("begin init rpc client....")
 
-	c, err := rpc.Dial("tcp", "localhost"+port)
+	conn, err := grpc.Dial("localhost"+port, grpc.WithInsecure())
+
 	if err != nil {
 		log.Fatalf("failed to connect server: %v", err)
 	}
-	var res msg.MessageResponse
+	defer conn.Close()
+	c := msg.NewMessageServiceClient(conn)
+
 	req := msg.Message{Uuid: uuid.New().String(), Data: "Say Hi"}
-	err = c.Call("Server.Send", req, &res)
+
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
+	defer cancel()
+
+	res, err := c.Send(ctx, &req)
 	if err != nil {
 		log.Fatalf("failed to receive msg: %v", err)
 	} else {

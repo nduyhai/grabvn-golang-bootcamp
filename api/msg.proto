@@ -1,5 +1,10 @@
 syntax = "proto3";
 
+service MessageService {
+    rpc Send (Message) returns (MessageResponse) {
+    };
+}
+
 message Message {
     string uuid = 1;
     string data = 2;
@@ -8,7 +13,4 @@ message Message {
 message MessageResponse {
     string uuid = 1;
     bool status = 2;
-}
-service MessageService {
-    rpc Send (Message) returns (MessageResponse);
 }
