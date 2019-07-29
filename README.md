@@ -3,18 +3,21 @@
 
 [ Assignment 1: REPL](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-1-repl)
 
-[ Seft study: gin-gonic, gorm](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_1)
+[ Self study: gin-gonic, gorm](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_1)
 
 
 ## Week 2: Concurrency, Channels, Goroutines,...
 
 [ Assignment 2: Counter](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-2-counter)
 
-[ Seft study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_2)
+[ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_2)
 
 
 ## Week 3: gRPC, Protobuf Basics
 
+[ Assignment 3:]()
+
+[ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_3)
 
 ## Week 4: Testing (unit, stub, fake, mock, functional, end to end,...)
 
