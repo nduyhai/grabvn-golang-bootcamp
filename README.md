@@ -1,5 +1,6 @@
-# Assignment 2: feedback
+# Assignment 3: feedback
 
+## Feedback
 Implement a simple passenger feedback service, with basic functions:
 
 * Add passenger feedback
@@ -22,3 +23,10 @@ message PassengerFeedback {
 }
 ```
 
+### Setup
+
+#### generate proto
+
+```shell script
+protoc -I api/ api/feedback.proto --go_out=plugins=grpc:internal/bootcamp/feedback
+```
