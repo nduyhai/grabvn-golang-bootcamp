@@ -16,7 +16,7 @@ func (s *server) GetById(ctx context.Context, in *feedback.FeedbackRequest) (*fe
 
 	return &feedback.PassengerFeedback{}, nil
 }
-func (s *server) GetByBookingCode(ctx context.Context, in *feedback.FeedbackRequest) (*feedback.ListFeedbackResponse, error) {
+func (s *server) GetByBookingCode(ctx context.Context, in *feedback.BookingRequest) (*feedback.ListFeedbackResponse, error) {
 	return &feedback.ListFeedbackResponse{}, nil
 }
 func (s *server) Delete(ctx context.Context, in *feedback.FeedbackRequest) (*feedback.FeedbackResponse, error) {
