@@ -1,28 +1,24 @@
-# Golang Bootcamp
-## Week 1 : Basic go syntax
+# Assignment 2: feedback
 
-[ Assignment 1: REPL](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-1-repl)
+Implement a simple passenger feedback service, with basic functions:
 
-[ Self study: gin-gonic, gorm](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_1)
+* Add passenger feedback
+* Get by passenger id
+* Get by booking code
+* Delete by passenger id
 
+Requirements:
 
-## Week 2: Concurrency, Channels, Goroutines,...
+* Implement gRPC server/client
+* Simply use local variable as storage
+* 1 booking has only 1 feedback
+* 1 passenger can add multiple feedbacks
 
-[ Assignment 2: Counter](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-2-counter)
+```proto
+message PassengerFeedback {
+    string bookingCode = 1;
+    int32 passengerID = 2;
+    string feedback = 3;
+}
+```
 
-[ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_2)
-
-
-## Week 3: gRPC, Protobuf Basics
-
-[ Assignment 3:]()
-
-[ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_3)
-
-## Week 4: Testing (unit, stub, fake, mock, functional, end to end,...)
-
-
-## Week 5: Dependency injection
-
-
-## Week 6: Instrumentation (logging, monitoring), Resiliency (circuit, retries)
