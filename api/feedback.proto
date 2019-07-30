@@ -19,6 +19,12 @@ message Booking {
     PassengerFeedback feedback = 3;
 }
 
+message CreateFeedbackRequest {
+    string passengerID = 2;
+    string bookingCode = 3;
+    string feedback = 4;
+}
+
 message FeedbackRequest {
     string ID = 1;
 }
@@ -29,17 +35,22 @@ message BookingRequest {
 
 message FeedbackResponse {
     string ID = 1;
-    string status = 2;
+    ResponseStatus status = 2;
 }
 
 message ListFeedbackResponse {
-    string status = 1;
+    ResponseStatus status = 1;
     repeated PassengerFeedback feedback = 2;
 
 }
 
+enum ResponseStatus {
+    FAIL = 0;
+    SUCCESS = 1;
+}
+
 service FeedbackService {
-    rpc add (PassengerFeedback) returns (FeedbackResponse) {
+    rpc add (CreateFeedbackRequest) returns (FeedbackResponse) {
     }
 
     rpc getById (FeedbackRequest) returns (PassengerFeedback) {

@@ -7,7 +7,7 @@ import (
 
 type server struct{}
 
-func (s *server) Add(ctx context.Context, in *feedback.PassengerFeedback) (*feedback.FeedbackResponse, error) {
+func (s *server) Add(ctx context.Context, in *feedback.CreateFeedbackRequest) (*feedback.FeedbackResponse, error) {
 
 	return &feedback.FeedbackResponse{}, nil
 }
