@@ -1,12 +1,11 @@
 package feedbackclient
 
 import (
-	"context"
+	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
 	"grabvn-golang-bootcamp/internal/bootcamp/configuration"
 	"grabvn-golang-bootcamp/internal/bootcamp/feedback"
 	"log"
-	"time"
 )
 
 func StartClient() {
@@ -15,7 +14,7 @@ func StartClient() {
 
 	log.Print("begin init rpc client....")
 
-	conn, err := grpc.Dial("localhost"+config.RPC.Port, grpc.WithInsecure())
+	conn, err := grpc.Dial("localhost:"+config.RPC.Port, grpc.WithInsecure())
 
 	if err != nil {
 		log.Fatalf("failed to connect server: %v", err)
@@ -23,14 +22,27 @@ func StartClient() {
 	defer conn.Close()
 	client := feedback.NewFeedbackServiceClient(conn)
 
-	ctx, cancel := context.WithTimeout(context.Background(), time.Second)
-	defer cancel()
+	webContext := &WebProxy{client: &client}
+	server := initializeServer()
+	setupRoute(server, webContext)
 
-	res, err := client.GetById(ctx, &feedback.FeedbackRequest{})
-	if err != nil {
-		log.Fatalf("failed to receive msg: %v", err)
-	} else {
-		log.Printf("Received: %v", res)
+	log.Print("begin run http server...")
 
-	}
+	_ = server.Run(":" + config.Server.Port)
+}
+
+func initializeServer() *gin.Engine {
+	server := gin.New()
+
+	server.Use(gin.Logger())
+	server.Use(gin.Recovery())
+
+	return server
+}
+
+func setupRoute(server *gin.Engine, webContext *WebProxy) {
+	server.POST("/api/feedback", webContext.addFeedback)
+	server.GET("/api/feedback/:id", webContext.getFeedbackById)
+	server.DELETE("/api/feedback/:id", webContext.deleteFeedbackById)
+	server.GET("/api/code/:id", webContext.getFeedbackByCode)
 }

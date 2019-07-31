@@ -26,7 +26,7 @@ func (s *server) Add(ctx context.Context, in *feedback.CreateFeedbackRequest) (*
 		return &feedback.FeedbackResponse{ID: res.ID}, nil
 	} else {
 		log.Print(err)
-		return &feedback.FeedbackResponse{ID: res.ID}, nil
+		return &feedback.FeedbackResponse{ID: res.ID}, errors.New("cannot create feedback")
 	}
 }
 
@@ -43,6 +43,7 @@ func (s *server) GetById(ctx context.Context, in *feedback.FeedbackRequest) (*fe
 		return &fb, nil
 
 	} else {
+		log.Print(err)
 		return &feedback.PassengerFeedback{ID: in.ID}, errors.New("not found")
 	}
 }
@@ -59,6 +60,7 @@ func (s *server) GetByBookingCode(ctx context.Context, in *feedback.BookingReque
 		return &fb, nil
 
 	} else {
+		log.Print(err)
 		return &feedback.PassengerFeedback{BookingCode: in.Code}, errors.New("not found")
 	}
 
@@ -68,7 +70,8 @@ func (s *server) Delete(ctx context.Context, in *feedback.FeedbackRequest) (*fee
 	if len(err) == 0 {
 		return &feedback.FeedbackResponse{ID: in.ID}, nil
 	} else {
-		return &feedback.FeedbackResponse{ID: in.ID}, errors.New("internal found")
+		log.Print(err)
+		return &feedback.FeedbackResponse{ID: in.ID}, errors.New("not found")
 	}
 
 }

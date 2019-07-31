@@ -16,6 +16,7 @@ func StartServer() {
 
 	db, err := connectDB(config)
 	if err == nil {
+		log.Print("begin exec auto migrate....")
 		err = db.AutoMigrate(Feedback{}).Error
 		if err != nil {
 			log.Fatal("failed to migrate table Feedback")
@@ -23,7 +24,7 @@ func StartServer() {
 
 		log.Print("begin init rpc server....")
 
-		ln, err := net.Listen("tcp", config.RPC.Port)
+		ln, err := net.Listen("tcp", ":"+config.RPC.Port)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
