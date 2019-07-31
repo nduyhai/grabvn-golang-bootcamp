@@ -21,18 +21,26 @@ func (s *server) Add(ctx context.Context, in *feedback.CreateFeedbackRequest) (*
 		Feedback:    in.Feedback,
 	}
 
-	err := s.DB.Create(&res).Error
-	if err == nil {
-		return &feedback.FeedbackResponse{ID: res.ID}, nil
+	var check Feedback
+	notFound := s.DB.Where("booking_code = ?", in.BookingCode).Find(&check).RecordNotFound()
+
+	if notFound {
+		err := s.DB.Create(&res).Error
+		if err == nil {
+			return &feedback.FeedbackResponse{ID: res.ID}, nil
+		} else {
+			log.Print(err)
+			return &feedback.FeedbackResponse{ID: res.ID}, errors.New("cannot create feedback")
+		}
 	} else {
-		log.Print(err)
-		return &feedback.FeedbackResponse{ID: res.ID}, errors.New("cannot create feedback")
+		return &feedback.FeedbackResponse{ID: res.ID}, errors.New("conflict")
 	}
+
 }
 
 func (s *server) GetById(ctx context.Context, in *feedback.FeedbackRequest) (*feedback.PassengerFeedback, error) {
 	var res Feedback
-	err := s.DB.Where("ID = ?", in.ID).Find(&res).GetErrors()
+	err := s.DB.Where("id = ?", in.ID).Find(&res).GetErrors()
 	if len(err) == 0 {
 		fb := feedback.PassengerFeedback{
 			ID:          res.ID,
@@ -49,7 +57,7 @@ func (s *server) GetById(ctx context.Context, in *feedback.FeedbackRequest) (*fe
 }
 func (s *server) GetByBookingCode(ctx context.Context, in *feedback.BookingRequest) (*feedback.PassengerFeedback, error) {
 	var res Feedback
-	err := s.DB.Where("BookingCode = ?", in.Code).Find(&res).GetErrors()
+	err := s.DB.Where("booking_code = ?", in.Code).Find(&res).GetErrors()
 	if len(err) == 0 {
 		fb := feedback.PassengerFeedback{
 			ID:          res.ID,
