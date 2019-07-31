@@ -1,4 +1,4 @@
-package feedbackserver
+package configuration
 
 import (
 	"gopkg.in/yaml.v2"
@@ -18,9 +18,12 @@ type Conf struct {
 	Server struct {
 		Port string `yaml:"port"`
 	}
+	RPC struct {
+		Port string `yaml:"port"`
+	}
 }
 
-func (c *Conf) loadConf() *Conf {
+func (c *Conf) LoadConf() *Conf {
 	pwd, _ := os.Getwd()
 	yamlFile, err := ioutil.ReadFile(pwd + "/configs/application.yml")
 	if err != nil {

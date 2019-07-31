@@ -5,4 +5,6 @@ db:
   password: example
   dbname: postgres
 server:
+  port: 8080
+rpc:
   port: 9000

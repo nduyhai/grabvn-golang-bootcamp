@@ -4,18 +4,15 @@ import (
 	"fmt"
 	"github.com/jinzhu/gorm"
 	"google.golang.org/grpc"
+	"grabvn-golang-bootcamp/internal/bootcamp/configuration"
 	"grabvn-golang-bootcamp/internal/bootcamp/feedback"
 	"log"
 	"net"
 )
 
-const (
-	port = ":9000"
-)
-
 func StartServer() {
-	var config Conf
-	config.loadConf()
+	var config configuration.Conf
+	config.LoadConf()
 
 	db, err := connectDB(config)
 	if err == nil {
@@ -26,7 +23,7 @@ func StartServer() {
 
 		log.Print("begin init rpc server....")
 
-		ln, err := net.Listen("tcp", port)
+		ln, err := net.Listen("tcp", config.RPC.Port)
 		if err != nil {
 			log.Fatalf("failed to listen: %v", err)
 		}
@@ -44,7 +41,7 @@ func StartServer() {
 	}
 }
 
-func connectDB(config Conf) (*gorm.DB, error) {
+func connectDB(config configuration.Conf) (*gorm.DB, error) {
 	args := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", config.DB.Host, config.DB.Port, config.DB.User, config.DB.DBName, config.DB.Password)
 	db, err := gorm.Open("postgres", args)
 	return db, err

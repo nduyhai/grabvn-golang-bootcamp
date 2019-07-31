@@ -35,18 +35,6 @@ message BookingRequest {
 
 message FeedbackResponse {
     string ID = 1;
-    ResponseStatus status = 2;
-}
-
-message ListFeedbackResponse {
-    ResponseStatus status = 1;
-    repeated PassengerFeedback feedback = 2;
-
-}
-
-enum ResponseStatus {
-    FAIL = 0;
-    SUCCESS = 1;
 }
 
 service FeedbackService {
@@ -56,7 +44,7 @@ service FeedbackService {
     rpc getById (FeedbackRequest) returns (PassengerFeedback) {
     }
 
-    rpc getByBookingCode (BookingRequest) returns (ListFeedbackResponse) {
+    rpc getByBookingCode (BookingRequest) returns (PassengerFeedback) {
     }
 
     rpc delete (FeedbackRequest) returns (FeedbackResponse) {
