@@ -3,6 +3,7 @@ package feedbackclient
 import (
 	"context"
 	"github.com/gin-gonic/gin"
+	"google.golang.org/grpc/status"
 	"grabvn-golang-bootcamp/internal/bootcamp/feedback"
 	"log"
 	"time"
@@ -29,7 +30,8 @@ func (w *WebProxy) addFeedback(ctx *gin.Context) {
 			ctx.JSON(201, res)
 		} else {
 			log.Print(err)
-			ctx.String(501, "internal server error")
+			convert := status.Convert(err)
+			ctx.String(int(convert.Code()), convert.Message())
 		}
 	}
 
@@ -49,7 +51,8 @@ func (w *WebProxy) getFeedbackById(ctx *gin.Context) {
 			ctx.JSON(200, res)
 		} else {
 			log.Print(err)
-			ctx.String(501, "internal server error")
+			convert := status.Convert(err)
+			ctx.String(int(convert.Code()), convert.Message())
 		}
 	}
 }
@@ -68,7 +71,8 @@ func (w *WebProxy) deleteFeedbackById(ctx *gin.Context) {
 			ctx.JSON(200, res)
 		} else {
 			log.Print(err)
-			ctx.String(501, "internal server error")
+			convert := status.Convert(err)
+			ctx.String(int(convert.Code()), convert.Message())
 		}
 	}
 }
@@ -87,7 +91,8 @@ func (w *WebProxy) getFeedbackByCode(ctx *gin.Context) {
 			ctx.JSON(200, res)
 		} else {
 			log.Print(err)
-			ctx.String(501, "internal server error")
+			convert := status.Convert(err)
+			ctx.String(int(convert.Code()), convert.Message())
 		}
 	}
 }

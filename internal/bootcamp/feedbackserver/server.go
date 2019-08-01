@@ -5,6 +5,7 @@ import (
 	"errors"
 	"github.com/google/uuid"
 	"github.com/jinzhu/gorm"
+	"google.golang.org/grpc/status"
 	"grabvn-golang-bootcamp/internal/bootcamp/feedback"
 	"log"
 )
@@ -33,7 +34,7 @@ func (s *server) Add(ctx context.Context, in *feedback.CreateFeedbackRequest) (*
 			return &feedback.FeedbackResponse{ID: res.ID}, errors.New("cannot create feedback")
 		}
 	} else {
-		return &feedback.FeedbackResponse{ID: res.ID}, errors.New("conflict")
+		return &feedback.FeedbackResponse{ID: res.ID}, status.Error(409, "conflict")
 	}
 
 }
@@ -52,13 +53,13 @@ func (s *server) GetById(ctx context.Context, in *feedback.FeedbackRequest) (*fe
 
 	} else {
 		log.Print(err)
-		return &feedback.PassengerFeedback{ID: in.ID}, errors.New("not found")
+		return &feedback.PassengerFeedback{ID: in.ID}, status.Error(404, "not found")
 	}
 }
 func (s *server) GetByBookingCode(ctx context.Context, in *feedback.BookingRequest) (*feedback.PassengerFeedback, error) {
 	var res Feedback
-	err := s.DB.Where("booking_code = ?", in.Code).Find(&res).GetErrors()
-	if len(err) == 0 {
+	found := s.DB.Where("booking_code = ?", in.Code).Find(&res).RecordNotFound()
+	if found {
 		fb := feedback.PassengerFeedback{
 			ID:          res.ID,
 			PassengerID: res.PassengerID,
@@ -68,18 +69,21 @@ func (s *server) GetByBookingCode(ctx context.Context, in *feedback.BookingReque
 		return &fb, nil
 
 	} else {
-		log.Print(err)
-		return &feedback.PassengerFeedback{BookingCode: in.Code}, errors.New("not found")
+		return &feedback.PassengerFeedback{BookingCode: in.Code}, status.Error(404, "not found")
 	}
 
 }
 func (s *server) Delete(ctx context.Context, in *feedback.FeedbackRequest) (*feedback.FeedbackResponse, error) {
-	err := s.DB.Where("ID = ?", in.ID).Delete(Feedback{}).GetErrors()
-	if len(err) == 0 {
-		return &feedback.FeedbackResponse{ID: in.ID}, nil
-	} else {
-		log.Print(err)
-		return &feedback.FeedbackResponse{ID: in.ID}, errors.New("not found")
-	}
 
+	if err := s.DB.Where("ID = ?", in.ID).First(&Feedback{}).Error; gorm.IsRecordNotFoundError(err) {
+		return &feedback.FeedbackResponse{ID: in.ID}, status.Error(404, "not found")
+	} else {
+		err := s.DB.Where("ID = ?", in.ID).Delete(Feedback{}).GetErrors()
+		if len(err) == 0 {
+			return &feedback.FeedbackResponse{ID: in.ID}, nil
+		} else {
+			log.Print(err)
+			return &feedback.FeedbackResponse{ID: in.ID}, status.Error(500, "internal server error")
+		}
+	}
 }
