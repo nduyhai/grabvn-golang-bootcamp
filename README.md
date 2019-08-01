@@ -26,8 +26,6 @@ message PassengerFeedback {
 
 * [Secure gRPC](https://bbengfort.github.io/programmer/2017/03/03/secure-grpc.html)
 
-* 
-
 ## Setup
 
 ### generate proto
@@ -47,3 +45,7 @@ bash scripts/cert.sh
 cd deployments
 docker-compose up
 ```
+
+### Restful API client
+
+using scripts/request.http
