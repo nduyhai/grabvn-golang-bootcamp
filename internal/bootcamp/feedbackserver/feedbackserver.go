@@ -3,6 +3,7 @@ package feedbackserver
 import (
 	"fmt"
 	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/postgres"
 	"google.golang.org/grpc"
 	"grabvn-golang-bootcamp/internal/bootcamp/configuration"
 	"grabvn-golang-bootcamp/internal/bootcamp/feedback"
