@@ -1,10 +1,6 @@
 package feedbackserver
 
 import (
-	"crypto/tls"
-	"crypto/x509"
-	"encoding/pem"
-	"errors"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -12,7 +8,6 @@ import (
 	"google.golang.org/grpc/credentials"
 	"grabvn-golang-bootcamp/internal/bootcamp/configuration"
 	"grabvn-golang-bootcamp/internal/bootcamp/feedback"
-	"io/ioutil"
 	"log"
 	"net"
 )
@@ -36,11 +31,10 @@ func StartServer() {
 			log.Fatalf("failed to listen: %v", err)
 		}
 
-		cert, err := loadX509KeyPair(config.RPC.CertFile, config.RPC.KeyFile, config.RPC.Passphrase)
+		cred, err := credentials.NewServerTLSFromFile(config.RPC.CertFile, config.RPC.KeyFile)
 		if err != nil {
 			log.Fatalf("could not load TLS keys:: %v", err)
 		}
-		cred := credentials.NewServerTLSFromCert(&cert)
 
 		rpcServer := grpc.NewServer(grpc.Creds(cred))
 		feedback.RegisterFeedbackServiceServer(rpcServer, &server{DB: db})
@@ -59,27 +53,4 @@ func connectDB(config configuration.Conf) (*gorm.DB, error) {
 	args := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", config.DB.Host, config.DB.Port, config.DB.User, config.DB.DBName, config.DB.Password)
 	db, err := gorm.Open("postgres", args)
 	return db, err
-}
-
-func loadX509KeyPair(certFile, keyFile, passphrase string) (tls.Certificate, error) {
-	certPEMBlock, err := ioutil.ReadFile(certFile)
-	if err != nil {
-		return tls.Certificate{}, err
-	}
-	keyPEMBlock, err := ioutil.ReadFile(keyFile)
-	if err != nil {
-		return tls.Certificate{}, err
-	}
-	block, rest := pem.Decode(keyPEMBlock)
-	if len(rest) > 0 {
-		return tls.Certificate{}, errors.New("extra data")
-	}
-	der, err := x509.DecryptPEMBlock(block, []byte(passphrase))
-	if err != nil {
-		return tls.Certificate{}, err
-	}
-	if _, err := x509.ParsePKCS1PrivateKey(der); err != nil {
-		return tls.Certificate{}, err
-	}
-	return tls.X509KeyPair(certPEMBlock, der)
 }

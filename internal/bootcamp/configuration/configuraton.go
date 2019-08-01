@@ -19,10 +19,9 @@ type Conf struct {
 		Port string `yaml:"port"`
 	}
 	RPC struct {
-		Port       string `yaml:"port"`
-		KeyFile    string `yaml:"keyFile"`
-		CertFile   string `yaml:"certFile"`
-		Passphrase string `yaml:"passphrase"`
+		Port     string `yaml:"port"`
+		KeyFile  string `yaml:"keyFile"`
+		CertFile string `yaml:"certFile"`
 	}
 }
 

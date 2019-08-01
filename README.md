@@ -22,18 +22,28 @@ message PassengerFeedback {
     string feedback = 3;
 }
 ```
+## Additional
 
-### Setup
+* [Secure gRPC](https://bbengfort.github.io/programmer/2017/03/03/secure-grpc.html)
 
-#### generate proto
+* 
+
+## Setup
+
+### generate proto
 
 ```shell script
 protoc -I api/ api/feedback.proto --go_out=plugins=grpc:internal/bootcamp/feedback
 ```
 
-#### Create cert
+### Create cert
 
 ```shell script
-cd scripts
-bash cert.sh
+bash scripts/cert.sh
+```
+
+### Run postgres
+```shell script
+cd deployments
+docker-compose up
 ```

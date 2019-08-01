@@ -1,1 +1,1 @@
-openssl req -x509 -newkey rsa:4096 -keyout ../configs/key.pem -out ../configs/cert.pem -passout pass:example -days 365 -subj "/C=US/ST=Oregon/L=Portland/O=Company Name/OU=Org/CN=www.example.com"
+openssl req -nodes -x509  -newkey rsa:4096  -keyout ./configs/key.pem -out ./configs/cert.pem -days 365 -subj "/C=US/ST=Oregon/L=Portland/O=Company Name/OU=Org/CN=localhost"
