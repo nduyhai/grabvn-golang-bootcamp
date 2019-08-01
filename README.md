@@ -30,3 +30,10 @@ message PassengerFeedback {
 ```shell script
 protoc -I api/ api/feedback.proto --go_out=plugins=grpc:internal/bootcamp/feedback
 ```
+
+#### Create cert
+
+```shell script
+cd scripts
+bash cert.sh
+```

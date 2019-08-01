@@ -8,3 +8,6 @@ server:
   port: 8080
 rpc:
   port: 9000
+  certFile: ./configs/cert.pem
+  keyFile: ./configs/key.pem
+  passphrase: example

@@ -3,6 +3,7 @@ package feedbackclient
 import (
 	"github.com/gin-gonic/gin"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"grabvn-golang-bootcamp/internal/bootcamp/configuration"
 	"grabvn-golang-bootcamp/internal/bootcamp/feedback"
 	"log"
@@ -14,8 +15,12 @@ func StartClient() {
 
 	log.Print("begin init rpc client....")
 
-	conn, err := grpc.Dial("localhost:"+config.RPC.Port, grpc.WithInsecure())
+	cred, err := credentials.NewClientTLSFromFile(config.RPC.CertFile, "")
+	if err != nil {
+		log.Fatalf("could not load TLS keys:: %v", err)
+	}
 
+	conn, err := grpc.Dial("localhost:"+config.RPC.Port, grpc.WithTransportCredentials(cred))
 	if err != nil {
 		log.Fatalf("failed to connect server: %v", err)
 	}
