@@ -1,4 +1,4 @@
-package feedbackclient
+package feedbackproxy
 
 import (
 	"github.com/gin-gonic/gin"
@@ -9,7 +9,7 @@ import (
 	"log"
 )
 
-func StartClient() {
+func StartProxy() {
 	var config configuration.Conf
 	config.LoadConf()
 

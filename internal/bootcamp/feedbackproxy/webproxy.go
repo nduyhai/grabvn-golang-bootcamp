@@ -1,4 +1,4 @@
-package feedbackclient
+package feedbackproxy
 
 import (
 	"context"
