@@ -1,1 +1,0 @@
-wire cmd/bootcamp/main.go

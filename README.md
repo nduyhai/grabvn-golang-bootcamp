@@ -9,5 +9,6 @@
 Ensuring that $GOPATH/bin is added to your $PATH.
 
 ```shell script
-bash scripts/setup.sh
-``'
+cd  cmd/bootcamp
+wire
+``
