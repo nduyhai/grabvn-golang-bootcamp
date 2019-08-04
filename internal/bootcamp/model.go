@@ -1,5 +1,3 @@
-//+build wireinject
-
 package bootcamp
 
 import (
@@ -9,7 +7,7 @@ import (
 type Message string
 
 func NewMessage(msg string) Message {
-	return Message("msg")
+	return Message(msg)
 }
 
 type Greeter struct {
