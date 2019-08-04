@@ -39,21 +39,26 @@ func (s *server) Add(ctx context.Context, in *feedback.CreateFeedbackRequest) (*
 
 }
 
-func (s *server) GetById(ctx context.Context, in *feedback.FeedbackRequest) (*feedback.PassengerFeedback, error) {
-	var res Feedback
-	err := s.DB.Where("id = ?", in.ID).Find(&res).GetErrors()
+func (s *server) GetByPassengerId(ctx context.Context, in *feedback.PassengerRequest) (*feedback.PassengerResponse, error) {
+	var resArr []Feedback
+	err := s.DB.Where("passenger_id = ?", in.PassengerID).Find(&resArr).GetErrors()
 	if len(err) == 0 {
-		fb := feedback.PassengerFeedback{
-			ID:          res.ID,
-			PassengerID: res.PassengerID,
-			BookingCode: res.BookingCode,
-			Feedback:    res.Feedback,
+		var fbs [] *feedback.PassengerFeedback
+		for _, res := range resArr {
+			pfb := feedback.PassengerFeedback{
+				ID:          res.ID,
+				PassengerID: res.PassengerID,
+				BookingCode: res.BookingCode,
+				Feedback:    res.Feedback,
+			}
+
+			fbs = append(fbs, &pfb)
 		}
-		return &fb, nil
+		return &feedback.PassengerResponse{PassengerID: in.PassengerID, Feedback: fbs}, nil
 
 	} else {
 		log.Print(err)
-		return &feedback.PassengerFeedback{ID: in.ID}, status.Error(404, "not found")
+		return &feedback.PassengerResponse{PassengerID: in.PassengerID}, status.Error(404, "not found")
 	}
 }
 func (s *server) GetByBookingCode(ctx context.Context, in *feedback.BookingRequest) (*feedback.PassengerFeedback, error) {

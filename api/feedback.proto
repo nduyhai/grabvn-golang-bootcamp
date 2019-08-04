@@ -8,21 +8,14 @@ message PassengerFeedback {
     string feedback = 4;
 }
 
-message Passenger {
-    string ID = 1;
-    repeated PassengerFeedback feedback = 2;
-}
-
-message Booking {
-    string code = 1;
-    string passengerID = 2;
-    PassengerFeedback feedback = 3;
-}
-
 message CreateFeedbackRequest {
     string passengerID = 2;
     string bookingCode = 3;
     string feedback = 4;
+}
+
+message PassengerRequest {
+    string passengerID = 1;
 }
 
 message FeedbackRequest {
@@ -37,11 +30,17 @@ message FeedbackResponse {
     string ID = 1;
 }
 
+message PassengerResponse {
+    string passengerID = 1;
+    repeated PassengerFeedback feedback = 2;
+}
+
+
 service FeedbackService {
     rpc add (CreateFeedbackRequest) returns (FeedbackResponse) {
     }
 
-    rpc getById (FeedbackRequest) returns (PassengerFeedback) {
+    rpc getByPassengerId (PassengerRequest) returns (PassengerResponse) {
     }
 
     rpc getByBookingCode (BookingRequest) returns (PassengerFeedback) {

@@ -47,7 +47,7 @@ func initializeServer() *gin.Engine {
 
 func setupRoute(server *gin.Engine, webContext *WebProxy) {
 	server.POST("/api/feedback", webContext.addFeedback)
-	server.GET("/api/feedback/:id", webContext.getFeedbackById)
+	server.GET("/api/feedback/:id", webContext.getFeedbackByPassengerId)
 	server.DELETE("/api/feedback/:id", webContext.deleteFeedbackById)
 	server.GET("/api/code/:id", webContext.getFeedbackByCode)
 }

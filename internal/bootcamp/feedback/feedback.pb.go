@@ -9,12 +9,12 @@ It is generated from these files:
 
 It has these top-level messages:
 	PassengerFeedback
-	Passenger
-	Booking
 	CreateFeedbackRequest
+	PassengerRequest
 	FeedbackRequest
 	BookingRequest
 	FeedbackResponse
+	PassengerResponse
 */
 package feedback
 
@@ -78,62 +78,6 @@ func (m *PassengerFeedback) GetFeedback() string {
 	return ""
 }
 
-type Passenger struct {
-	ID       string               `protobuf:"bytes,1,opt,name=ID,json=iD" json:"ID,omitempty"`
-	Feedback []*PassengerFeedback `protobuf:"bytes,2,rep,name=feedback" json:"feedback,omitempty"`
-}
-
-func (m *Passenger) Reset()                    { *m = Passenger{} }
-func (m *Passenger) String() string            { return proto.CompactTextString(m) }
-func (*Passenger) ProtoMessage()               {}
-func (*Passenger) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
-
-func (m *Passenger) GetID() string {
-	if m != nil {
-		return m.ID
-	}
-	return ""
-}
-
-func (m *Passenger) GetFeedback() []*PassengerFeedback {
-	if m != nil {
-		return m.Feedback
-	}
-	return nil
-}
-
-type Booking struct {
-	Code        string             `protobuf:"bytes,1,opt,name=code" json:"code,omitempty"`
-	PassengerID string             `protobuf:"bytes,2,opt,name=passengerID" json:"passengerID,omitempty"`
-	Feedback    *PassengerFeedback `protobuf:"bytes,3,opt,name=feedback" json:"feedback,omitempty"`
-}
-
-func (m *Booking) Reset()                    { *m = Booking{} }
-func (m *Booking) String() string            { return proto.CompactTextString(m) }
-func (*Booking) ProtoMessage()               {}
-func (*Booking) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
-
-func (m *Booking) GetCode() string {
-	if m != nil {
-		return m.Code
-	}
-	return ""
-}
-
-func (m *Booking) GetPassengerID() string {
-	if m != nil {
-		return m.PassengerID
-	}
-	return ""
-}
-
-func (m *Booking) GetFeedback() *PassengerFeedback {
-	if m != nil {
-		return m.Feedback
-	}
-	return nil
-}
-
 type CreateFeedbackRequest struct {
 	PassengerID string `protobuf:"bytes,2,opt,name=passengerID" json:"passengerID,omitempty"`
 	BookingCode string `protobuf:"bytes,3,opt,name=bookingCode" json:"bookingCode,omitempty"`
@@ -143,7 +87,7 @@ type CreateFeedbackRequest struct {
 func (m *CreateFeedbackRequest) Reset()                    { *m = CreateFeedbackRequest{} }
 func (m *CreateFeedbackRequest) String() string            { return proto.CompactTextString(m) }
 func (*CreateFeedbackRequest) ProtoMessage()               {}
-func (*CreateFeedbackRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
+func (*CreateFeedbackRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
 func (m *CreateFeedbackRequest) GetPassengerID() string {
 	if m != nil {
@@ -166,6 +110,22 @@ func (m *CreateFeedbackRequest) GetFeedback() string {
 	return ""
 }
 
+type PassengerRequest struct {
+	PassengerID string `protobuf:"bytes,1,opt,name=passengerID" json:"passengerID,omitempty"`
+}
+
+func (m *PassengerRequest) Reset()                    { *m = PassengerRequest{} }
+func (m *PassengerRequest) String() string            { return proto.CompactTextString(m) }
+func (*PassengerRequest) ProtoMessage()               {}
+func (*PassengerRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
+
+func (m *PassengerRequest) GetPassengerID() string {
+	if m != nil {
+		return m.PassengerID
+	}
+	return ""
+}
+
 type FeedbackRequest struct {
 	ID string `protobuf:"bytes,1,opt,name=ID,json=iD" json:"ID,omitempty"`
 }
@@ -173,7 +133,7 @@ type FeedbackRequest struct {
 func (m *FeedbackRequest) Reset()                    { *m = FeedbackRequest{} }
 func (m *FeedbackRequest) String() string            { return proto.CompactTextString(m) }
 func (*FeedbackRequest) ProtoMessage()               {}
-func (*FeedbackRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
+func (*FeedbackRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
 func (m *FeedbackRequest) GetID() string {
 	if m != nil {
@@ -189,7 +149,7 @@ type BookingRequest struct {
 func (m *BookingRequest) Reset()                    { *m = BookingRequest{} }
 func (m *BookingRequest) String() string            { return proto.CompactTextString(m) }
 func (*BookingRequest) ProtoMessage()               {}
-func (*BookingRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
+func (*BookingRequest) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
 
 func (m *BookingRequest) GetCode() string {
 	if m != nil {
@@ -205,7 +165,7 @@ type FeedbackResponse struct {
 func (m *FeedbackResponse) Reset()                    { *m = FeedbackResponse{} }
 func (m *FeedbackResponse) String() string            { return proto.CompactTextString(m) }
 func (*FeedbackResponse) ProtoMessage()               {}
-func (*FeedbackResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
+func (*FeedbackResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{5} }
 
 func (m *FeedbackResponse) GetID() string {
 	if m != nil {
@@ -214,14 +174,38 @@ func (m *FeedbackResponse) GetID() string {
 	return ""
 }
 
+type PassengerResponse struct {
+	PassengerID string               `protobuf:"bytes,1,opt,name=passengerID" json:"passengerID,omitempty"`
+	Feedback    []*PassengerFeedback `protobuf:"bytes,2,rep,name=feedback" json:"feedback,omitempty"`
+}
+
+func (m *PassengerResponse) Reset()                    { *m = PassengerResponse{} }
+func (m *PassengerResponse) String() string            { return proto.CompactTextString(m) }
+func (*PassengerResponse) ProtoMessage()               {}
+func (*PassengerResponse) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{6} }
+
+func (m *PassengerResponse) GetPassengerID() string {
+	if m != nil {
+		return m.PassengerID
+	}
+	return ""
+}
+
+func (m *PassengerResponse) GetFeedback() []*PassengerFeedback {
+	if m != nil {
+		return m.Feedback
+	}
+	return nil
+}
+
 func init() {
 	proto.RegisterType((*PassengerFeedback)(nil), "PassengerFeedback")
-	proto.RegisterType((*Passenger)(nil), "Passenger")
-	proto.RegisterType((*Booking)(nil), "Booking")
 	proto.RegisterType((*CreateFeedbackRequest)(nil), "CreateFeedbackRequest")
+	proto.RegisterType((*PassengerRequest)(nil), "PassengerRequest")
 	proto.RegisterType((*FeedbackRequest)(nil), "FeedbackRequest")
 	proto.RegisterType((*BookingRequest)(nil), "BookingRequest")
 	proto.RegisterType((*FeedbackResponse)(nil), "FeedbackResponse")
+	proto.RegisterType((*PassengerResponse)(nil), "PassengerResponse")
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -236,7 +220,7 @@ const _ = grpc.SupportPackageIsVersion4
 
 type FeedbackServiceClient interface {
 	Add(ctx context.Context, in *CreateFeedbackRequest, opts ...grpc.CallOption) (*FeedbackResponse, error)
-	GetById(ctx context.Context, in *FeedbackRequest, opts ...grpc.CallOption) (*PassengerFeedback, error)
+	GetByPassengerId(ctx context.Context, in *PassengerRequest, opts ...grpc.CallOption) (*PassengerResponse, error)
 	GetByBookingCode(ctx context.Context, in *BookingRequest, opts ...grpc.CallOption) (*PassengerFeedback, error)
 	Delete(ctx context.Context, in *FeedbackRequest, opts ...grpc.CallOption) (*FeedbackResponse, error)
 }
@@ -258,9 +242,9 @@ func (c *feedbackServiceClient) Add(ctx context.Context, in *CreateFeedbackReque
 	return out, nil
 }
 
-func (c *feedbackServiceClient) GetById(ctx context.Context, in *FeedbackRequest, opts ...grpc.CallOption) (*PassengerFeedback, error) {
-	out := new(PassengerFeedback)
-	err := grpc.Invoke(ctx, "/FeedbackService/getById", in, out, c.cc, opts...)
+func (c *feedbackServiceClient) GetByPassengerId(ctx context.Context, in *PassengerRequest, opts ...grpc.CallOption) (*PassengerResponse, error) {
+	out := new(PassengerResponse)
+	err := grpc.Invoke(ctx, "/FeedbackService/getByPassengerId", in, out, c.cc, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -289,7 +273,7 @@ func (c *feedbackServiceClient) Delete(ctx context.Context, in *FeedbackRequest,
 
 type FeedbackServiceServer interface {
 	Add(context.Context, *CreateFeedbackRequest) (*FeedbackResponse, error)
-	GetById(context.Context, *FeedbackRequest) (*PassengerFeedback, error)
+	GetByPassengerId(context.Context, *PassengerRequest) (*PassengerResponse, error)
 	GetByBookingCode(context.Context, *BookingRequest) (*PassengerFeedback, error)
 	Delete(context.Context, *FeedbackRequest) (*FeedbackResponse, error)
 }
@@ -316,20 +300,20 @@ func _FeedbackService_Add_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _FeedbackService_GetById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(FeedbackRequest)
+func _FeedbackService_GetByPassengerId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PassengerRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FeedbackServiceServer).GetById(ctx, in)
+		return srv.(FeedbackServiceServer).GetByPassengerId(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/FeedbackService/GetById",
+		FullMethod: "/FeedbackService/GetByPassengerId",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FeedbackServiceServer).GetById(ctx, req.(*FeedbackRequest))
+		return srv.(FeedbackServiceServer).GetByPassengerId(ctx, req.(*PassengerRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -379,8 +363,8 @@ var _FeedbackService_serviceDesc = grpc.ServiceDesc{
 			Handler:    _FeedbackService_Add_Handler,
 		},
 		{
-			MethodName: "getById",
-			Handler:    _FeedbackService_GetById_Handler,
+			MethodName: "getByPassengerId",
+			Handler:    _FeedbackService_GetByPassengerId_Handler,
 		},
 		{
 			MethodName: "getByBookingCode",
@@ -399,24 +383,24 @@ func init() { proto.RegisterFile("feedback.proto", fileDescriptor0) }
 
 var fileDescriptor0 = []byte{
 	// 306 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x93, 0xcf, 0x4e, 0xb3, 0x40,
-	0x14, 0xc5, 0x0b, 0x6d, 0xda, 0xaf, 0xb7, 0x09, 0xa5, 0x37, 0xf9, 0x0c, 0xe9, 0x0a, 0x27, 0x2e,
-	0xba, 0x1a, 0x23, 0xae, 0xdc, 0x52, 0x62, 0x42, 0xdc, 0x18, 0x7d, 0x02, 0x60, 0xae, 0x84, 0xd4,
-	0x30, 0x08, 0xa8, 0x71, 0xed, 0xab, 0xfa, 0x20, 0x06, 0x28, 0x74, 0xa4, 0x18, 0xdd, 0xb8, 0x83,
-	0xfb, 0xe7, 0xfc, 0xee, 0x39, 0xc9, 0x80, 0xf1, 0x40, 0x24, 0xc2, 0x20, 0xda, 0xf1, 0x2c, 0x97,
-	0xa5, 0x64, 0xef, 0x1a, 0xac, 0x6e, 0x83, 0xa2, 0xa0, 0x34, 0xa6, 0xfc, 0x7a, 0xdf, 0x43, 0x03,
-	0x74, 0xdf, 0xb3, 0x34, 0x5b, 0xdb, 0xcc, 0xef, 0xf4, 0xc4, 0x43, 0x1b, 0x16, 0x59, 0x3b, 0xe4,
-	0x7b, 0x96, 0x5e, 0x37, 0xd4, 0x52, 0x35, 0x11, 0x4a, 0xb9, 0x4b, 0xd2, 0x78, 0x2b, 0x05, 0x59,
-	0xe3, 0x66, 0x42, 0x29, 0xe1, 0x1a, 0xfe, 0xb5, 0x6c, 0x6b, 0x52, 0xb7, 0xbb, 0x7f, 0x76, 0x03,
-	0xf3, 0xee, 0x88, 0x23, 0x38, 0x57, 0x16, 0x75, 0x7b, 0xbc, 0x59, 0x38, 0xc8, 0x8f, 0x4e, 0x56,
-	0xc4, 0x24, 0xcc, 0xdc, 0x86, 0x8b, 0x08, 0x93, 0xa8, 0x3a, 0xa7, 0x11, 0xab, 0xbf, 0x7f, 0xe1,
-	0x45, 0x05, 0x56, 0x46, 0x7e, 0x02, 0xbe, 0xc2, 0xff, 0x6d, 0x4e, 0x41, 0x49, 0x5d, 0x8f, 0x9e,
-	0x9e, 0xa9, 0x28, 0xff, 0x3c, 0xb6, 0x53, 0x58, 0xf6, 0x91, 0xbd, 0xf0, 0xd8, 0x19, 0x18, 0xfb,
-	0x30, 0xda, 0x89, 0x81, 0x4c, 0x18, 0x03, 0xf3, 0x20, 0x54, 0x64, 0x32, 0x2d, 0xa8, 0xaf, 0xe4,
-	0x7c, 0x68, 0x07, 0xda, 0x3d, 0xe5, 0x2f, 0x49, 0x44, 0xe8, 0xc0, 0x38, 0x10, 0x02, 0x4f, 0xf8,
-	0xa0, 0xff, 0xf5, 0x8a, 0xf7, 0x55, 0xd9, 0x08, 0x2f, 0x60, 0x16, 0x53, 0xe9, 0xbe, 0xf9, 0x02,
-	0x4d, 0xde, 0xdf, 0x18, 0x08, 0x9a, 0x8d, 0xf0, 0x0a, 0xcc, 0x7a, 0xc5, 0x55, 0x72, 0x59, 0xf2,
-	0xaf, 0xbe, 0xbe, 0x59, 0x3d, 0x87, 0xa9, 0xa0, 0x47, 0x2a, 0x69, 0x00, 0x36, 0x74, 0x5e, 0x38,
-	0xad, 0xdf, 0xc5, 0xe5, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0x1b, 0x3e, 0x64, 0xb5, 0x29, 0x03,
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x53, 0x4d, 0x4b, 0xb4, 0x50,
+	0x14, 0x1e, 0x75, 0x18, 0xde, 0xf7, 0x0c, 0x38, 0x7a, 0xa0, 0x10, 0x57, 0x76, 0x69, 0x31, 0xab,
+	0x1b, 0x58, 0x9b, 0x68, 0xe7, 0x48, 0xe0, 0x2e, 0xa6, 0x5f, 0xa0, 0xde, 0x93, 0xc8, 0x84, 0xd7,
+	0xd4, 0x8a, 0xd6, 0xfd, 0xdf, 0x7e, 0x43, 0x8c, 0x8e, 0x1f, 0xe9, 0x44, 0x6d, 0xda, 0xe9, 0x39,
+	0x8f, 0xe7, 0xf9, 0x42, 0xd0, 0x1f, 0x88, 0x44, 0x14, 0xc6, 0x3b, 0x9e, 0x17, 0xb2, 0x92, 0xec,
+	0x5d, 0x01, 0xf3, 0x2e, 0x2c, 0x4b, 0xca, 0x12, 0x2a, 0x6e, 0x0f, 0x3b, 0xd4, 0x41, 0x0d, 0x7c,
+	0x4b, 0x71, 0x94, 0xf5, 0xff, 0xad, 0x9a, 0xfa, 0xe8, 0xc0, 0x32, 0x6f, 0x41, 0x81, 0x6f, 0xa9,
+	0xf5, 0x62, 0x38, 0xda, 0x23, 0x22, 0x29, 0x77, 0x69, 0x96, 0x6c, 0xa4, 0x20, 0x4b, 0x6b, 0x10,
+	0x83, 0x11, 0xda, 0xf0, 0xaf, 0xe5, 0xb6, 0xe6, 0xf5, 0xba, 0x7b, 0x67, 0xaf, 0x70, 0xb2, 0x29,
+	0x28, 0xac, 0xa8, 0x55, 0xb0, 0xa5, 0xa7, 0x67, 0x2a, 0xab, 0x3f, 0x27, 0xbe, 0x02, 0xa3, 0x73,
+	0xff, 0x0d, 0xa7, 0x32, 0xe1, 0x64, 0x67, 0xb0, 0x1a, 0x0b, 0x1d, 0x25, 0xc6, 0xce, 0x41, 0xf7,
+	0x1a, 0x0d, 0x2d, 0x02, 0x61, 0x1e, 0xef, 0x15, 0x36, 0x98, 0xfa, 0x99, 0x31, 0x30, 0xfa, 0x43,
+	0x65, 0x2e, 0xb3, 0x92, 0x26, 0x97, 0x68, 0x50, 0x50, 0x07, 0xfa, 0x51, 0x23, 0xf2, 0x81, 0x6b,
+	0xd5, 0xd1, 0xd6, 0x4b, 0x17, 0xf9, 0xa4, 0xe8, 0x3e, 0x09, 0xf7, 0x43, 0xe9, 0x4d, 0xdd, 0x53,
+	0xf1, 0x92, 0xc6, 0x84, 0x2e, 0x68, 0xa1, 0x10, 0x78, 0xca, 0x8f, 0x96, 0x63, 0x9b, 0x7c, 0x2c,
+	0x9e, 0xcd, 0xf0, 0x06, 0x8c, 0x84, 0x2a, 0xef, 0xad, 0xe3, 0x0a, 0x04, 0x9a, 0x7c, 0x1c, 0xb2,
+	0x8d, 0x7c, 0x62, 0x8a, 0xcd, 0xf0, 0xfa, 0xf0, 0xb1, 0x37, 0xa8, 0x6f, 0xc5, 0xbf, 0x06, 0x69,
+	0x1f, 0xf1, 0xc1, 0x66, 0x78, 0x01, 0x0b, 0x41, 0x8f, 0x54, 0x11, 0x1a, 0xfc, 0x37, 0x42, 0xa3,
+	0x45, 0xfd, 0x03, 0x5c, 0x7e, 0x06, 0x00, 0x00, 0xff, 0xff, 0xd0, 0x18, 0x72, 0x1c, 0x12, 0x03,
 	0x00, 0x00,
 }

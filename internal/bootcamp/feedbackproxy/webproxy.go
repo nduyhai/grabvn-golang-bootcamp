@@ -37,7 +37,7 @@ func (w *WebProxy) addFeedback(ctx *gin.Context) {
 
 }
 
-func (w *WebProxy) getFeedbackById(ctx *gin.Context) {
+func (w *WebProxy) getFeedbackByPassengerId(ctx *gin.Context) {
 	id := ctx.Param("id")
 	if id == "" {
 		ctx.String(400, "invalid param")
@@ -46,7 +46,7 @@ func (w *WebProxy) getFeedbackById(ctx *gin.Context) {
 		c, cancel := context.WithTimeout(context.Background(), time.Second)
 		defer cancel()
 
-		res, err := (*w.client).GetById(c, &feedback.FeedbackRequest{ID: id})
+		res, err := (*w.client).GetByPassengerId(c, &feedback.PassengerRequest{PassengerID: id})
 		if err == nil {
 			ctx.JSON(200, res)
 		} else {
