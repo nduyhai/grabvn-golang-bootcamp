@@ -54,7 +54,7 @@ func (s *server) GetByPassengerId(ctx context.Context, in *feedback.PassengerReq
 
 			fbs = append(fbs, &pfb)
 		}
-		return &feedback.PassengerResponse{PassengerID: in.PassengerID, Feedback: fbs}, nil
+		return &feedback.PassengerResponse{PassengerID: in.PassengerID, Feedbacks: fbs}, nil
 
 	} else {
 		log.Print(err)

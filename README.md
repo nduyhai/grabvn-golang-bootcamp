@@ -48,4 +48,8 @@ docker-compose up
 
 ### Restful API client
 
-using scripts/request.http
+Enjoy with
+
+```shell script
+scripts/request.http
+```

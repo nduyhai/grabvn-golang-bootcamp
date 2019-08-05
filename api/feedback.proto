@@ -32,7 +32,7 @@ message FeedbackResponse {
 
 message PassengerResponse {
     string passengerID = 1;
-    repeated PassengerFeedback feedback = 2;
+    repeated PassengerFeedback feedbacks = 2;
 }
 
 
