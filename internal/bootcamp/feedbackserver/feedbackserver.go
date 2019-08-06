@@ -1,6 +1,7 @@
 package feedbackserver
 
 import (
+	"context"
 	"fmt"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
@@ -10,6 +11,7 @@ import (
 	"grabvn-golang-bootcamp/internal/bootcamp/feedback"
 	"log"
 	"net"
+	"time"
 )
 
 func StartServer() {
@@ -36,7 +38,7 @@ func StartServer() {
 			log.Fatalf("could not load TLS keys:: %v", err)
 		}
 
-		rpcServer := grpc.NewServer(grpc.Creds(cred))
+		rpcServer := grpc.NewServer(grpc.Creds(cred), withServerUnaryInterceptor())
 		feedback.RegisterFeedbackServiceServer(rpcServer, &server{DB: db})
 		if rpcServer == nil {
 			log.Fatalf("failed to register server: %v", err)
@@ -53,4 +55,18 @@ func connectDB(config configuration.Conf) (*gorm.DB, error) {
 	args := fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=disable", config.DB.Host, config.DB.Port, config.DB.User, config.DB.DBName, config.DB.Password)
 	db, err := gorm.Open("postgres", args)
 	return db, err
+}
+
+func withServerUnaryInterceptor() grpc.ServerOption {
+	return grpc.UnaryInterceptor(serverInterceptor)
+}
+
+func serverInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	start := time.Now()
+
+	h, err := handler(ctx, req)
+
+	log.Print(fmt.Sprintf("Request - Method:%s\tDuration:%s\tError:%v\n", info.FullMethod, time.Since(start), err))
+
+	return h, err
 }
