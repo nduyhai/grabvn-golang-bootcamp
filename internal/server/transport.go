@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"github.com/go-kit/kit/endpoint"
-	"grabvn-golang-bootcamp/internal/response"
+	"grabvn-golang-bootcamp/internal/common"
 	"net/http"
 )
 
@@ -18,7 +18,7 @@ func decodeEchoRequest(_ context.Context, r *http.Request) (interface{}, error) 
 }
 
 func encodeResponse(_ context.Context, writer http.ResponseWriter, rs interface{}) error {
-	res := rs.(response.HttpResponse)
+	res := rs.(common.HttpResponse)
 	writer.WriteHeader(res.GetStatusCode())
 
 	if res.GetBody() != "" {

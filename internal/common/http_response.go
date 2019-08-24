@@ -1,4 +1,4 @@
-package response
+package common
 
 type HttpResponse interface {
 	GetStatusCode() int

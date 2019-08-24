@@ -2,14 +2,14 @@ package server
 
 import (
 	"github.com/go-kit/kit/metrics"
-	"grabvn-golang-bootcamp/internal/response"
+	"grabvn-golang-bootcamp/internal/common"
 	"time"
 )
 
 func instrumentingMiddleware(
 	requestCount metrics.Counter,
 	requestLatency metrics.Histogram,
-) ServiceMiddleware {
+) EchoServiceMiddleware {
 	return func(next EchoService) EchoService {
 		return &instMw{requestCount, requestLatency, next}
 	}
@@ -21,7 +21,7 @@ type instMw struct {
 	EchoService
 }
 
-func (mw *instMw) Echo() (res response.HttpResponse) {
+func (mw *instMw) Echo() (res common.HttpResponse) {
 	defer func(begin time.Time) {
 		lvs := []string{"method", "Echo"}
 		mw.requestCount.With(lvs...).Add(1)
