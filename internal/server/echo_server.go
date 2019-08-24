@@ -38,13 +38,13 @@ func (s *Server) echo(writer http.ResponseWriter, request *http.Request) {
 
 	// 30% chance of failure
 	if rand.Intn(100) < 30 {
-		log.Info("Handle request fail!")
+		log.Info("Server: Handle request fail!")
 		writer.WriteHeader(500)
 		_, _ = writer.Write([]byte("a chaos monkey broke your server"))
 		return
 	} else {
 		// Happy path
-		log.Info("Handle request success!")
+		log.Info("Server: Handle request success!")
 		writer.WriteHeader(200)
 		_ = request.Write(writer)
 	}

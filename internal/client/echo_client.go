@@ -8,12 +8,13 @@ import (
 const url = "http://localhost:8080/test"
 
 func StartEchoClient() {
+	logger := log.New()
 
 	for {
 		client := newHttpClient()
 		res := client.Get(url)
 
-		log.Print("Client receive with code ", res.GetStatusCode(), " status ", res.GetStatus())
+		logger.Info("Client: Receive request with code: ", res.GetStatusCode(), ", status: ", res.GetStatus())
 
 		time.Sleep(1 * time.Second)
 	}

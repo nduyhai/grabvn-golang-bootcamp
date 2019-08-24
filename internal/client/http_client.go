@@ -1,7 +1,6 @@
 package client
 
 import (
-	log "github.com/sirupsen/logrus"
 	"io/ioutil"
 	"net/http"
 )
@@ -20,13 +19,13 @@ func newHttpClient() httpClient {
 func (h *httpClientImpl) Get(url string) httpResponse {
 	resp, err := http.Get(url)
 	if err != nil {
-		return newHttpResponse(501, "http client call with error", "")
+		return newHttpResponse(501, "cannot execute request", "")
 	} else {
 		defer resp.Body.Close()
 
 		bodyBytes, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			log.Fatal(err)
+			return newHttpResponse(400, "400 read response error", err.Error())
 		}
 		bodyString := string(bodyBytes)
 
