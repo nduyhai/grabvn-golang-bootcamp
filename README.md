@@ -21,18 +21,18 @@
 
 ## Week 4: Testing (unit, stub, fake, mock, functional, end to end,...)
 
-[ Assignment 4:](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-4-test)
+[ Assignment 4:](https://github.com/goaww/testing)
 
 [ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_4)
 
 ## Week 5: Dependency injection
 
-[ Assignment 5:]()
+[ Assignment 5:](https://github.com/nduyhai/GrabGoTrainingWeek5Assignment)
 
 [ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_5)
 
 ## Week 6: Instrumentation (logging, monitoring), Resiliency (circuit, retries)
 
-[ Assignment 6:]()
+[ Assignment 6:](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-6)
 
 [ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_6)
