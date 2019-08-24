@@ -21,7 +21,7 @@ func (mw *logMw) Echo() (res common.HttpResponse) {
 	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"source", "server",
-			"method", "Echo",
+			"method", "echo",
 			"code", res.GetStatusCode(),
 			"status", res.GetStatus(),
 			"took", time.Since(begin),

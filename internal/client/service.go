@@ -1,7 +1,6 @@
 package client
 
 import (
-	"errors"
 	"grabvn-golang-bootcamp/internal/common"
 )
 
@@ -26,7 +25,7 @@ func (e *echoClient) GetEcho() (common.HttpResponse, error) {
 		return res, err
 	}
 	if 500 <= res.GetStatusCode() {
-		return res, errors.New("server return status code >= 500")
+		return res, newIError(res.GetStatus())
 	}
 	return res, err
 }
