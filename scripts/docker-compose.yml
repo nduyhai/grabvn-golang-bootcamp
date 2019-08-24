@@ -1,0 +1,16 @@
+version: '3.1'
+services:
+  datadog:
+    image: datadog/agent:6.13.0
+    environment:
+      - DD_API_KEY=39bfe3e0d55c21f62ffc2756f75ecd8c
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /proc/mounts:/host/proc/mounts:ro
+      - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
+    ports:
+      - "8126:8126"
+    networks:
+      - datadog-network
+networks:
+  datadog-network:

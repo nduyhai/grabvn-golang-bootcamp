@@ -1,52 +1,39 @@
 package server
 
 import (
-	"math/rand"
+	"context"
+	"github.com/go-kit/kit/log"
+	"github.com/go-kit/kit/metrics/dogstatsd"
+	trans "github.com/go-kit/kit/transport/http"
 	"net/http"
+	"os"
+	"time"
+)
 
-	log "github.com/sirupsen/logrus"
+const (
+	statsHostPort = "127.0.0.1:8126"
 )
 
 func StartEchoServer() {
 
-	// Create our server
-	logger := log.New()
-	server := Server{
-		logger: logger,
-	}
+	var logger log.Logger
+	logger = log.NewLogfmtLogger(os.Stdout)
 
-	// Start the server
-	server.ListenAndServe()
-}
+	stats := dogstatsd.New("echo_service", logger)
 
-// Server represents our server.
-type Server struct {
-	logger *log.Logger
-}
+	var es EchoService
+	es = NewEchoService()
+	es = loggingMiddleware(logger)(es)
+	es = instrumentingMiddleware(stats.NewCounter("echo_counter", 1), stats.NewHistogram("echo_latency", 1))(es)
 
-// ListenAndServe starts the server
-func (s *Server) ListenAndServe() {
-	s.logger.Info("echo server is starting on port 8080...")
-	http.HandleFunc("/", s.echo)
+	echoHandler := trans.NewServer(
+		makeEchoEndpoint(es),
+		decodeEchoRequest,
+		encodeResponse,
+	)
+
+	http.Handle("/", echoHandler)
 	_ = http.ListenAndServe(":8080", nil)
-}
 
-// Echo echos back the request as a response
-func (s *Server) echo(writer http.ResponseWriter, request *http.Request) {
-	writer.Header().Set("Access-Control-Allow-Origin", "*")
-	writer.Header().Set("Access-Control-Allow-Headers", "Content-Range, Content-Disposition, Content-Type, ETag")
-
-	// 30% chance of failure
-	if rand.Intn(100) < 30 {
-		log.Info("Server: Handle request fail!")
-		writer.WriteHeader(500)
-		_, _ = writer.Write([]byte("a chaos monkey broke your server"))
-		return
-	} else {
-		// Happy path
-		log.Info("Server: Handle request success!")
-		writer.WriteHeader(200)
-		_ = request.Write(writer)
-	}
-
+	stats.SendLoop(context.Background(), time.Tick(2*time.Second), "tcp", statsHostPort)
 }
