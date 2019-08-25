@@ -26,18 +26,10 @@ func (e *rMw) GetEcho() (common.HttpResponse, error) {
 			res, err = e.EchoClient.GetEcho()
 			return err
 		},
-		retry.RetryIf(func(err error) bool {
-			err, ok := err.(iError)
-			if ok {
-				return true
-			} else {
-				return false
-			}
-		}),
 		retry.OnRetry(func(n uint, err error) {
 			_ = e.log.Log("source", "client", "method", "retry", "error", err.Error(), "num", n)
 		}),
-		retry.Attempts(5),
+		retry.Attempts(2),
 		retry.Delay(100*time.Millisecond),
 		retry.LastErrorOnly(true),
 	)

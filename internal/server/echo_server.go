@@ -11,7 +11,8 @@ import (
 )
 
 const (
-	statsHostPort = "127.0.0.1:8126"
+	statsHostPort = "localhost:8125"
+	statsProtocol = "udp"
 )
 
 func StartEchoServer() {
@@ -19,12 +20,13 @@ func StartEchoServer() {
 	var logger log.Logger
 	logger = log.NewLogfmtLogger(os.Stdout)
 
-	stats := dogstatsd.New("echo_service", logger)
+	stats := dogstatsd.New("echo.", logger)
+	go stats.SendLoop(context.Background(), time.Tick(2*time.Second), statsProtocol, statsHostPort)
 
 	var es EchoService
 	es = NewEchoService()
 	es = loggingMiddleware(logger)(es)
-	es = instrumentingMiddleware(stats.NewCounter("echo_counter", 1), stats.NewHistogram("echo_latency", 1))(es)
+	es = instrumentingMiddleware(stats.NewCounter("counter", 1), stats.NewHistogram("latency", 1))(es)
 
 	echoHandler := trans.NewServer(
 		makeEchoEndpoint(es),
@@ -35,5 +37,4 @@ func StartEchoServer() {
 	http.Handle("/", echoHandler)
 	_ = http.ListenAndServe(":8080", nil)
 
-	stats.SendLoop(context.Background(), time.Tick(2*time.Second), "tcp", statsHostPort)
 }

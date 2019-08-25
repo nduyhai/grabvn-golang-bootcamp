@@ -4,12 +4,16 @@ services:
     image: datadog/agent:6.13.0
     environment:
       - DD_API_KEY=39bfe3e0d55c21f62ffc2756f75ecd8c
+      - DD_LOGS_ENABLED=true
+      - DD_LOGS_CONFIG_CONTAINER_COLLECT_ALL=true
+      - DD_AC_EXCLUDE="name:datadog-agent"
+      - DD_DOGSTATSD_NON_LOCAL_TRAFFIC=true
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - /proc/mounts:/host/proc/mounts:ro
       - /sys/fs/cgroup:/host/sys/fs/cgroup:ro
     ports:
-      - "8126:8126"
+      - "8125:8125/udp"
     networks:
       - datadog-network
 networks:

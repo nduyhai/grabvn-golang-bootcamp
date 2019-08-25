@@ -9,9 +9,9 @@ import (
 )
 
 const (
-	url        = "http://localhost:8080/test"
-	cmd        = "echo_cmd"
-	hystrixAdd = "localhost:8088"
+	url           = "http://localhost:8080/test"
+	cmd           = "echo_cmd"
+	streamAddress = "localhost:8088"
 )
 
 func StartEchoClient() {
@@ -21,12 +21,12 @@ func StartEchoClient() {
 	hystrix.ConfigureCommand(cmd, hystrix.CommandConfig{
 		Timeout:               1000,
 		MaxConcurrentRequests: 100,
-		ErrorPercentThreshold: 25,
+		ErrorPercentThreshold: 30,
 	})
 
-	hystrixStreamHandler := hystrix.NewStreamHandler()
-	hystrixStreamHandler.Start()
-	go http.ListenAndServe(hystrixAdd, hystrixStreamHandler)
+	streamHandler := hystrix.NewStreamHandler()
+	streamHandler.Start()
+	go http.ListenAndServe(streamAddress, streamHandler)
 
 	var client EchoClient
 	client = NewEchoClient(url)
