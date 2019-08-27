@@ -10,6 +10,8 @@ func newIError(status string) *iError {
 	return &iError{status: status}
 }
 
-func (i iError) Error() string {
+func (i *iError) Error() string {
 	return fmt.Sprintf("%s", i.status)
 }
+
+
