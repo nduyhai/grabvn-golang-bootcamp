@@ -30,8 +30,8 @@ func StartEchoClient() {
 
 	var client EchoClient
 	client = NewEchoClient(url)
-	client = retryMiddleware(logger)(client)
 	client = circuitBreakerMiddleware(cmd, logger)(client)
+	client = retryMiddleware(logger)(client)
 
 	for {
 		res, err := client.GetEcho()
