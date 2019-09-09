@@ -15,24 +15,14 @@
 
 ## Week 3: gRPC, Protobuf Basics
 
-[ Assignment 3: Feedback](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-3-feedback)
+[ Assignment 3:]()
 
 [ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_3)
 
 ## Week 4: Testing (unit, stub, fake, mock, functional, end to end,...)
 
-[ Assignment 4:](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-4-test)
-
-[ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_4)
 
 ## Week 5: Dependency injection
 
-[ Assignment 5:]()
-
-[ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_5)
 
 ## Week 6: Instrumentation (logging, monitoring), Resiliency (circuit, retries)
-
-[ Assignment 6:]()
-
-[ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_6)

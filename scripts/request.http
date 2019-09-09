@@ -1,0 +1,32 @@
+# For a quick start check out our HTTP Requests collection (Tools|HTTP Client|Open HTTP Requests Collection) or
+# paste cURL into the file and request will be converted to HTTP Request format.
+#
+# Following HTTP Request Live Templates are available:
+# * 'gtrp' and 'gtr' create a GET request with or without query parameters;
+# * 'ptr' and 'ptrp' create a POST request with a simple or parameter-like body;
+# * 'mptr' and 'fptr' create a POST request to submit a form with a text or file field (multipart/form-data);
+POST http://localhost:8080/api/feedback
+Content-Type: application/json
+
+{
+  "PassengerID": "a01ab5c6-0d3e-42b9-888a-1c68275c52aa",
+  "BookingCode": "d4252599-fd4c-4874-93cc-d0fc4b684ff8",
+  "Feedback": "Not good fit"
+}
+
+###
+
+GET http://localhost:8080/api/feedback/a01ab5c6-0d3e-42b9-888a-1c68275c52aa
+Accept: application/json
+
+###
+
+GET http://localhost:8080/api/code/d4252599-fd4c-4874-93cc-d0fc4b684ff8
+Accept: application/json
+
+###
+
+DELETE http://localhost:8080/api/feedback/ce217cf8-cfaa-4dae-80be-c152156f4462
+Accept: application/json
+
+###
