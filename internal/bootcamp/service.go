@@ -28,13 +28,16 @@ func NewQueryServiceImpl() *QueryServiceImpl {
 
 func (q *QueryServiceImpl) User(u string) QueryResult {
 	res := QueryResult{User: u}
-	user, response, err := q.client.Users.Get(context.Background(), u)
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	user, response, err := q.client.Users.Get(ctx, u)
 	if err == nil {
 		log.Print(user, response)
 		res.ID = user.ID
 		res.URL = user.URL
 		res.Success = true
 	} else {
+		cancel()
 		log.Print(err)
 		res.Success = false
 	}
