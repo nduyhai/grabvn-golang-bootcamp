@@ -1,0 +1,17 @@
+type: google.api.Service
+config_version: 3
+
+http:
+  rules:
+    - selector: feedback.FeedbackService.add
+      post: /v1/api/feedback
+      body: "*"
+    - selector: feedback.FeedbackService.getByPassengerId
+      get: /v1/api/feedback
+      body: "*"
+    - selector: feedback.FeedbackService.getByBookingCode
+      get: /v1/api/code
+      body: "*"
+    - selector: feedback.FeedbackService.delete
+      delete: /v1/api/feedback
+      body: "*"

@@ -1,28 +1,9 @@
-# Golang Bootcamp
-## Week 1 : Basic go syntax
+# Feedback service with gateway
 
-[ Assignment 1: REPL](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-1-repl)
+# Setup
 
-[ Self study: gin-gonic, gorm](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_1)
+## generate proto
 
-
-## Week 2: Concurrency, Channels, Goroutines,...
-
-[ Assignment 2: Counter](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/ass-2-counter)
-
-[ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_2)
-
-
-## Week 3: gRPC, Protobuf Basics
-
-[ Assignment 3:]()
-
-[ Self study](https://github.com/nduyhai/grabvn-golang-bootcamp/tree/week_3)
-
-## Week 4: Testing (unit, stub, fake, mock, functional, end to end,...)
-
-
-## Week 5: Dependency injection
-
-
-## Week 6: Instrumentation (logging, monitoring), Resiliency (circuit, retries)
+```
+$GOPATH/pkg/mod/github.com/golang/protobuf@v1.3.2/proto/protoc -I/usr/local/include -I.  -I$GOPATH/src -I$GOPATH/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis   --go_out=plugins=grpc:internal/bootcamp/feedback
+```
